@@ -16,7 +16,7 @@ jobs:
           mkdir -p sandbox/logs
           dd if=/dev/zero of=sandbox/logs/big.log bs=1M count=1 status=none
           touch -d "40 days ago" sandbox/logs/old.log
-      - name: Dry-run interactive cleanup
+      - name: Dry-run interactive cleanup (non-interactive batch mode)
         run: |
-          bash src/cleanup-interactive.sh sandbox/logs
+          bash src/cleanup-interactive.sh sandbox/logs --batch trash-stale --pick a
 
