@@ -5,7 +5,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: src
+      - run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - run: shellcheck src/*.sh
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare sandbox
+        run: |
+          mkdir -p sandbox/logs
+          dd if=/dev/zero of=sandbox/logs/big.log bs=1M count=1 status=none
+          touch -d "40 days ago" sandbox/logs/old.log
+      - name: Dry-run interactive cleanup
+        run: |
+          bash src/cleanup-interactive.sh sandbox/logs
 
